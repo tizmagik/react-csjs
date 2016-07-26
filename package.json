@@ -1,0 +1,53 @@
+{
+  "name": "react-csjs",
+  "version": "1.0.0",
+  "description": "React Higher Order Component for CSJS",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production BABEL_ENV=commonjs babel src --out-dir lib",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run lint && npm run build",
+    "lint": "eslint ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tizmagik/react-csjs.git"
+  },
+  "keywords": [
+    "react",
+    "csjs",
+    "css",
+    "style",
+    "stylesheet",
+    "hoc",
+    "decorator"
+  ],
+  "peerDependencies": {
+    "csjs": ">=1.0.0 < 5.0.0",
+    "react": ">=0.13"
+  },
+  "author": "Jeremy Gayed (https://github.com/tizmagik)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tizmagik/react-csjs/issues"
+  },
+  "homepage": "https://github.com/tizmagik/react-csjs#readme",
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.11.4",
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-0": "^6.5.0",
+    "cross-env": "^2.0.0",
+    "csjs": "^1.0.5",
+    "eslint": "^3.1.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.11.1",
+    "eslint-plugin-jsx-a11y": "^2.0.1",
+    "eslint-plugin-react": "^5.2.2",
+    "react": "^15.2.1"
+  },
+  "dependencies": {
+  }
+}
