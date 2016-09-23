@@ -33,8 +33,7 @@ export default function withStyles(css) {
 
       componentWillUnmount() {
         let refs = cache.get(DecoratedComponent);
-        refs.count--;
-        if (refs.count === 0) {
+        if (--refs.count === 0) {
             cache.delete(DecoratedComponent)
             removeStyle(this.elm);
             this.elm = null;
