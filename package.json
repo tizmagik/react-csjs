@@ -1,6 +1,6 @@
 {
   "name": "react-csjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React Higher Order Component for CSJS",
   "main": "lib/index.js",
   "scripts": {
@@ -48,6 +48,5 @@
     "eslint-plugin-react": "^5.2.2",
     "react": "^15.2.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
