@@ -11,7 +11,7 @@ export default function withStyles(css) {
                             || DecoratedComponent.name || 'Component'})`
 
       componentWillMount() {
-        let refs = cache.get(DecoratedComponent);
+        const refs = cache.get(DecoratedComponent);
         if (!refs) {
           this.elm = insertStyle(csjs.getCss(css));
           cache.set(DecoratedComponent, { style: this.elm, count: 1 });
@@ -32,11 +32,11 @@ export default function withStyles(css) {
       }
 
       componentWillUnmount() {
-        let refs = cache.get(DecoratedComponent);
+        const refs = cache.get(DecoratedComponent);
         if (--refs.count === 0) {
-            cache.delete(DecoratedComponent)
-            removeStyle(this.elm);
-            this.elm = null;
+          cache.delete(DecoratedComponent);
+          removeStyle(this.elm);
+          this.elm = null;
         }
       }
 
