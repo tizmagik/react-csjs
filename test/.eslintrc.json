@@ -8,6 +8,8 @@
         "devDependencies": true,
         "optionalDependencies": false
     }],
-    "no-unused-expressions": "off"
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "react/prop-types": "off"
   }
 }
