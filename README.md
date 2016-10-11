@@ -11,14 +11,14 @@ The benefit of using react-csjs instead of using CSJS directly is auto-mount/unm
 ### Installation
 
 ```
-npm install --save react-csjs
+npm install --save csjs react-csjs
 ```
 
 ## Usage
 
-You can use react-csjs as a higher order component either via the decorators syntax (which you'll need something like [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) for it to work).
-
 ##### `@decorator` syntax
+
+You can use react-csjs as a higher order component either in combination with CSJS via the decorators syntax (which you'll need something like [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) for it to work).
 
 ```js
 import React from 'react';
@@ -36,6 +36,36 @@ const styles = csjs`
 `;
 
 @withStyles(styles)
+export default class Button extends React.Component {
+  render() {
+    return (
+      <div className={this.props.classes.button}>
+        <span className={this.props.classes.label}>
+          {this.props.children}
+        </span>
+      </div>
+    )
+  }
+}
+```
+
+##### tagged `@decorator` syntax
+
+Or directly as a tagged decorator without the need of importing CSJS explicitly.
+
+```js
+import React from 'react';
+import csjs from 'react-csjs';
+
+@csjs`
+  .button {
+    background-color: purple
+  }
+
+  .label {
+    color: blue
+  }
+`;
 export default class Button extends React.Component {
   render() {
     return (
