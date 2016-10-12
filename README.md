@@ -10,6 +10,8 @@ The benefit of using react-csjs instead of using CSJS directly is auto-mount/unm
 
 ### Installation
 
+You'll need to install both `csjs` and `react-csjs` like so:
+
 ```
 npm install --save csjs react-csjs
 ```

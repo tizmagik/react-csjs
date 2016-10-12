@@ -27,6 +27,13 @@
     "react": ">=0.13"
   },
   "author": "Jeremy Gayed (https://github.com/tizmagik)",
+  "contributors": [
+    {
+      "name" : "Paul Henschel",
+      "email" : "drcmda@gmail.com",
+      "url" : "http://github.com/drcmda/"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tizmagik/react-csjs/issues"
