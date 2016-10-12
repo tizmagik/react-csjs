@@ -2,7 +2,7 @@
 
 React Higher Order Component for [CSJS](https://github.com/rtsao/csjs). Automatically mounts/unmounts styles, works with React Hot Loader. _Inspired by the JSS-equivalent, [react-jss](https://github.com/jsstyles/react-jss)._
 
-[![npm](https://img.shields.io/npm/v/react-csjs.svg)](https://www.npmjs.com/package/react-csjs)
+[![npm](https://img.shields.io/npm/v/react-csjs.svg)](https://www.npmjs.com/package/react-csjs) [![Build Status](https://travis-ci.org/tizmagik/react-csjs.svg?branch=master)](https://travis-ci.org/tizmagik/react-csjs)
 
 ### Auto-mount/unmounting of styles
 
