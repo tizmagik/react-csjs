@@ -16,7 +16,7 @@ export const testCss = `
   }
 `;
 
-export const TestComponent = ({ classes, children }) => (
+export const ButtonComponent = ({ classes, children }) => (
   <div className={classes.button}>
     <span className={classes.label}>
       {children}
@@ -24,7 +24,20 @@ export const TestComponent = ({ classes, children }) => (
   </div>
 );
 
-export const DecoratedComponent = withStyles(testCss)(TestComponent);
+export const WrappedButton = withStyles(testCss)(ButtonComponent);
+
+@withStyles(testCss)
+export class DecoratedButton extends React.Component {
+  render() {
+    return (
+      <div className={this.props.classes.button}>
+        <span className={this.props.classes.label}>
+          {this.props.children}
+        </span>
+      </div>
+    );
+  }
+}
 
 export const testElm = jsdom.jsdom().createElement('style');
 testElm.setAttribute('type', 'text/css');

@@ -3,7 +3,13 @@ import ReactTestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 import sinon from 'sinon';
-import { emptyDom, testElm, DecoratedComponent, TestComponent } from './setup';
+import {
+  emptyDom,
+  testElm,
+  ButtonComponent,
+  DecoratedButton,
+  WrappedButton,
+} from './setup';
 import withStyles from '../src';
 
 describe('index.js:', () => {
@@ -37,13 +43,18 @@ describe('index.js:', () => {
   });
 
   describe('withStyles', () => {
-    it('should return a valid React component that renders', () => {
-      expect(ReactTestUtils.isElement(<TestComponent />)).to.be.true;
-      expect(ReactTestUtils.isElement(<DecoratedComponent />)).to.be.true;
+    it('should return a valid React component that renders (decorator)', () => {
+      expect(ReactTestUtils.isElement(<DecoratedButton />)).to.be.true;
 
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<DecoratedButton />);
+      expect(ReactTestUtils.isCompositeComponent(rendered)).to.be.true;
+    });
+
+    it('should return a valid React component that renders (wrapped)', () => {
+      expect(ReactTestUtils.isElement(<ButtonComponent />)).to.be.true;
+      expect(ReactTestUtils.isElement(<WrappedButton />)).to.be.true;
+
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       expect(ReactTestUtils.isCompositeComponent(rendered)).to.be.true;
     });
 
@@ -55,9 +66,7 @@ describe('index.js:', () => {
         .onSecondCall()
         .returns({ style: testElm, count: 1 });
 
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       rendered.componentWillMount();
       expect(cache.set.calledOnce).to.be.true;
     });
@@ -70,9 +79,7 @@ describe('index.js:', () => {
         .onSecondCall()
         .returns({ style: testElm, count: 1 });
 
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       rendered.componentWillUnmount();
       expect(cache.delete.calledOnce).to.be.true;
     });
@@ -95,9 +102,7 @@ describe('index.js:', () => {
        * will then unmount one of them, but the first one still remains, so the
        * cache should not be cleared.
        */
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       rendered.componentWillMount();
       rendered.componentWillUnmount();
       expect(cache.delete.called).to.be.false;
@@ -108,9 +113,7 @@ describe('index.js:', () => {
       withStyles.__Rewire__('csjs', csjs);
 
       process.env.NODE_ENV = 'test';
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       rendered.componentWillUpdate();
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.true;
@@ -121,9 +124,7 @@ describe('index.js:', () => {
       withStyles.__Rewire__('csjs', csjs);
 
       process.env.NODE_ENV = 'production';
-      const rendered = ReactTestUtils.renderIntoDocument(
-        <DecoratedComponent />
-      );
+      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
       rendered.componentWillUpdate();
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.false;

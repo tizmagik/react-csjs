@@ -10,6 +10,7 @@
     }],
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
+    "react/prefer-stateless-function": "off",
     "react/prop-types": "off"
   }
 }
