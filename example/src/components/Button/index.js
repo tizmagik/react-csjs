@@ -26,10 +26,6 @@ export default class Button extends Component {
   };
 
   handleClick = () => {
-    console.log('clicked');
-    // this.setState(prevState => ({
-    //   clicks: prevState.clicks++
-    // }));
     this.setState(prevState => ({
         clicks: prevState.clicks + 1
     }));
