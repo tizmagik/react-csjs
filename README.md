@@ -78,3 +78,23 @@ const Button = ({classes, children}) => (
 
 export default withStyles(styles)(Button);
 ```
+
+### The `classes` property
+
+react-csjs adds its own `classes` prop to the higher order component which contains the same CSJS object that was passed in through `withStyles`. You are welcome to use `classes` or the original styles object if it is still in scope, but in some circumstances the `classes` prop may be your only option.
+
+Popular linting rules such as [`react/prop-types`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/prop-types.md) from [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) will complain that the `classes` prop is missing from props validation. There are several ways to address this:
+
+1. Add the `classes` prop to your component's propTypes:
+
+    ```js
+    Button.propTypes = {
+      classes: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
+    };
+    ```
+
+2. Tweak the lint rule to ignore the `classes` prop:
+
+    ```json
+    "prop-types": [2, { "ignore": ["classes"] }]
+    ```
