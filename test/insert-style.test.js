@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import jsdom from 'jsdom';
-import { emptyDom, testCss, testElm, testElmIe8 } from './setup';
+import { emptyDom, testCss, testElm, testElmIe8 } from './testUtil';
 import insertStyle, { removeStyle, getStyle } from '../src/insert-style';
 
 describe('insert-styles.js:', () => {

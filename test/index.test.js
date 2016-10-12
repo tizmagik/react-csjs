@@ -9,7 +9,7 @@ import {
   ButtonComponent,
   DecoratedButton,
   WrappedButton,
-} from './setup';
+} from './testUtil';
 import withStyles from '../src';
 
 describe('index.js:', () => {
