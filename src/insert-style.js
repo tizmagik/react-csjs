@@ -1,9 +1,9 @@
 export function getStyle(elm) {
-  if ('textContent' in elm) {
-    return elm.textContent;
+  if ('styleSheet' in elm && 'cssText' in elm.styleSheet) {
+    return elm.styleSheet.cssText; // IE8
   }
 
-  return elm.styleSheet.cssText; // IE8
+  return elm.textContent;
 }
 
 export function removeStyle(elm) {
@@ -14,10 +14,10 @@ export default function (css, options = {}) {
   const elm = options.element || document.createElement('style');
   elm.setAttribute('type', 'text/css');
 
-  if ('textContent' in elm) {
-    elm.textContent = css;
-  } else {
+  if ('styleSheet' in elm && 'cssText' in elm.styleSheet) {
     elm.styleSheet.cssText = css; // IE8
+  } else {
+    elm.textContent = css;
   }
 
   if (!options.element) {
