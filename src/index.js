@@ -17,7 +17,7 @@ export default function withStyles(css) {
           cache.set(DecoratedComponent, { style: this.elm, count: 1 });
         } else {
           this.elm = refs.style;
-          refs.count++;
+          refs.count += 1;
         }
       }
 
@@ -33,7 +33,9 @@ export default function withStyles(css) {
 
       componentWillUnmount() {
         const refs = cache.get(DecoratedComponent);
-        if (--refs.count === 0) {
+
+        refs.count -= 1;
+        if (refs.count === 0) {
           cache.delete(DecoratedComponent);
           removeStyle(this.elm);
           this.elm = null;
