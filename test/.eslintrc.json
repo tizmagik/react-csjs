@@ -1,0 +1,16 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      "error", {
+        "devDependencies": true,
+        "optionalDependencies": false
+    }],
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "react/prefer-stateless-function": "off",
+    "react/prop-types": "off"
+  }
+}
