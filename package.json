@@ -27,6 +27,9 @@
     "react": ">=0.13"
   },
   "author": "Jeremy Gayed (https://github.com/tizmagik)",
+  "contributors": [
+    "Justin Hall <justin.r.hall@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tizmagik/react-csjs/issues"
