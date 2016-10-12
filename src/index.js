@@ -4,7 +4,8 @@ import insertStyle, { removeStyle, getStyle } from './insert-style';
 
 const cache = new Map();
 
-export default function (css, values) {
+export default function (userCss, values) {
+  let css = userCss;
 
   if (Array.isArray(css)) {
     // Forward string literals to csjs
