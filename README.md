@@ -128,3 +128,7 @@ Popular linting rules such as [`react/prop-types`](https://github.com/yannickcr/
     ```json
     "prop-types": [2, { "ignore": ["classes"] }]
     ```
+
+## Example
+
+You can see a fully working example of an app using `react-csjs` in the [/example](/example) directory.
