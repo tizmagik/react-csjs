@@ -47,6 +47,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.16.3",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.14",
     "cross-env": "^2.0.0",
     "csjs": "^1.0.5",
     "eslint": "^3.1.1",
