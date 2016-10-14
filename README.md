@@ -2,7 +2,9 @@
 
 React Higher Order Component for [CSJS](https://github.com/rtsao/csjs). Automatically mounts/unmounts styles, works with React Hot Loader. _Inspired by the JSS-equivalent, [react-jss](https://github.com/jsstyles/react-jss)._
 
-[![npm](https://img.shields.io/npm/v/react-csjs.svg)](https://www.npmjs.com/package/react-csjs) [![Build Status](https://travis-ci.org/tizmagik/react-csjs.svg?branch=master)](https://travis-ci.org/tizmagik/react-csjs)
+[![npm](https://img.shields.io/npm/v/react-csjs.svg)](https://www.npmjs.com/package/react-csjs)
+[![Build Status](https://travis-ci.org/tizmagik/react-csjs.svg?branch=master)](https://travis-ci.org/tizmagik/react-csjs)
+[![Coverage Status](https://coveralls.io/repos/github/tizmagik/react-csjs/badge.svg)](https://coveralls.io/github/tizmagik/react-csjs)
 
 ### Auto-mount/unmounting of styles
 
@@ -126,3 +128,7 @@ Popular linting rules such as [`react/prop-types`](https://github.com/yannickcr/
     ```json
     "prop-types": [2, { "ignore": ["classes"] }]
     ```
+
+## Example
+
+You can see a fully working example of an app using `react-csjs` in the [/example](/example) directory.
