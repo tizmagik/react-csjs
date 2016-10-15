@@ -4,6 +4,10 @@ This is a fully working React app (using [kyt](https://github.com/NYTimes/kyt)) 
 
 You can use this as a reference or as a place to test out changes to `react-csjs` for local development before submitting a PR. The `react-csjs` module referenced in this example repo is aliased to `../src`, so any changes made there will be reflected.
 
+## Example usage
+
+The various [components](./src/components) in this app show example usage patterns in react-csjs. The patterns shown in [`<Code />`](./src/components/Code/index.js) and [`<Header />`](./src/components/Header/index.js) components are recommended.
+
 ## Installation
 
 From within the `/example` directory:

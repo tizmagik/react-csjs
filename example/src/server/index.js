@@ -13,7 +13,6 @@ app.use(express.static(path.join(process.cwd(), KYT.PUBLIC_DIR)));
 app.get('/', (req, res) => {
   res.send(`
     <head>
-      <link rel="shortcut icon" href='/kyt-favicon.png'>
       ${clientAssets.main.css ?
         '<link rel="stylesheet" type="text/css" href="' + clientAssets.main.css + '">'
         : ''}
