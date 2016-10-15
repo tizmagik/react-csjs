@@ -6,7 +6,7 @@ You can use this as a reference or as a place to test out changes to `react-csjs
 
 ## Example usage
 
-The various [components](./components) in this app show example usage patterns in react-csjs. The patterns shown in [`<Code />`](./components/Code/index.js) and [`<Header />`](./components/Header/index.js) components are recommended.
+The various [components](./src/components) in this app show example usage patterns in react-csjs. The patterns shown in [`<Code />`](./src/components/Code/index.js) and [`<Header />`](./src/components/Header/index.js) components are recommended.
 
 ## Installation
 
