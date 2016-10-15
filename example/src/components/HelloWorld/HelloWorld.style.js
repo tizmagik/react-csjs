@@ -5,11 +5,6 @@ export default csjs`
     font-family: Helvetica, Arial, sans-serif;
   }
 
-  code {
-    display: inline-block;
-    color: crimson;
-  }
-
   p {
     padding: 10px 0;
   }
