@@ -132,3 +132,7 @@ Popular linting rules such as [`react/prop-types`](https://github.com/yannickcr/
 ## Example
 
 You can see a fully working example of an app using `react-csjs` in the [/example](/example) directory.
+
+## Server-side Rendering
+
+Currently, react-csjs modifies the global `document` object when inserting styles. As this does not exist in a typical server side environment by default, you are responsible for providing one. You may do so using something like [jsdom](https://github.com/tmpvar/jsdom) and rendering your app there instead of using the traditional `ReactDOMServer.renderToString` method. See the [isomorphic-react-csjs-demo](https://github.com/wKovacs64/isomorphic-react-csjs-demo) project for an example of this technique. Please note that this approach is temporary as we work to implement a solution within react-csjs itself.
