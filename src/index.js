@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import csjs from 'csjs';
 import insertStyle, { removeStyle, getStyle } from './insert-style';
-import rebuilder from './rebuilder';
 
 const cache = new Map();
 
@@ -9,9 +8,8 @@ export default function (userCss, ...values) {
   let css = userCss;
 
   if (Array.isArray(css)) {
-    css = rebuilder(css, ...values);
     // Forward string literals to csjs
-    css = csjs([css]);
+    css = csjs(css, ...values);
   }
 
   return DecoratedComponent =>
