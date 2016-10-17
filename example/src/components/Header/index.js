@@ -7,10 +7,13 @@
 import React, { Component } from 'react';
 import csjs from 'react-csjs';
 
+const crimson = 'crimson';
+const lineHeight = '1.8em';
+
 @csjs`
   .header {
-    color: crimson;
-    line-height: 1.8em;
+    color: ${crimson};
+    line-height: ${lineHeight};
   }
 `
 export default class Header extends Component {
