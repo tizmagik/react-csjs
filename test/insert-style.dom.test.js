@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import jsdom from 'jsdom';
 import { emptyDom, testCss, testElm, testElmIe8 } from './testUtil';
-import insertStyle, { removeStyle, getStyle } from '../src/insert-style';
+import insertStyle, { removeStyle, getStyle } from '../src/dom';
 
-describe('insert-styles.js:', () => {
+describe('DOM variant', () => {
   let document;
 
   beforeEach(() => {

@@ -1,33 +1,17 @@
-export function getStyle(elm) {
-  if ('styleSheet' in elm && 'cssText' in elm.styleSheet) {
-    return elm.styleSheet.cssText; // IE8
-  }
+// Depending on environment, we return the proper
+// DOM or Node-based version of 'insert-style'
+// insertStyle, { getStyle, removeStyle }
 
-  return elm.textContent;
-}
+import insertStyleServer,
+  { getStyle as getStyleServer, removeStyle as removeStyleServer } from './server';
+import insertStyleDOM,
+  { getStyle as getStyleDOM, removeStyle as removeStyleDOM } from './dom';
 
-export function removeStyle(elm) {
-  return elm.parentNode.removeChild(elm);
-}
+const isServer = (typeof document === 'undefined');
 
-export default function (css, options = {}) {
-  const elm = options.element || document.createElement('style');
-  elm.setAttribute('type', 'text/css');
+const getStyle = isServer ? getStyleServer : getStyleDOM;
+const removeStyle = isServer ? removeStyleServer : removeStyleDOM;
+const insertStyle = isServer ? insertStyleServer : insertStyleDOM;
 
-  if ('styleSheet' in elm && 'cssText' in elm.styleSheet) {
-    elm.styleSheet.cssText = css; // IE8
-  } else {
-    elm.textContent = css;
-  }
-
-  if (!options.element) {
-    const head = document.getElementsByTagName('head')[0];
-    if (options && options.prepend) {
-      head.insertBefore(elm, head.childNodes[0]);
-    } else {
-      head.appendChild(elm);
-    }
-  }
-
-  return elm;
-}
+export { getStyle, removeStyle };
+export default insertStyle;
