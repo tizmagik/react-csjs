@@ -14,6 +14,7 @@ describe('insert-style', () => {
     it('should return DOM variant', () => {
       global.document = {};
       const insertStyle = require('../src/insert-style');
+
       expect(insertStyle.__get__('isServer')).to.equal(false);
       delete global.document;
     });
@@ -22,6 +23,7 @@ describe('insert-style', () => {
   describe('when on the server', () => {
     it('should return Server variant', () => {
       const insertStyle = require('../src/insert-style');
+
       expect(insertStyle.__get__('isServer')).to.equal(true);
     });
   });
