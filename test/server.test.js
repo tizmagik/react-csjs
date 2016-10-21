@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { emptyDom, testCss, testElm, testElmIe8 } from './testUtil';
+import { testCss } from './testUtil';
 import insertStyle, { removeStyle, getStyle } from '../src/server';
 
 describe('Server variant', () => {
@@ -12,7 +12,7 @@ describe('Server variant', () => {
 
   describe('getStyle', () => {
     it('should get the CSS text for a given key', () => {
-      const style = insertStyle(testCss);
+      insertStyle(testCss);
       expect(getStyle(testCss)).to.equal(testCss);
     });
 

@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { expect } from 'chai';
 
 const cacheKey = require.resolve('../src/insert-style');
@@ -5,7 +6,6 @@ const cacheKey = require.resolve('../src/insert-style');
 describe('insert-style', () => {
   beforeEach(() => {
     if (require.cache[cacheKey]) {
-      console.log('deleting cache');
       delete require.cache[cacheKey];
     }
   });
