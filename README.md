@@ -129,10 +129,65 @@ Popular linting rules such as [`react/prop-types`](https://github.com/yannickcr/
     "prop-types": [2, { "ignore": ["classes"] }]
     ```
 
-## Example
-
-You can see a fully working example of an app using `react-csjs` in the [/example](/example) directory.
-
 ## Server-side Rendering
 
-Isomorphic/universal react-csjs is coming (see [#24](https://github.com/tizmagik/react-csjs/issues/24)). Currently, it expects the global `document` object to be present when inserting styles. As this does not exist in a typical server side environment by default, you are responsible for providing one as a workaround for now. You may do so using something like [jsdom](https://github.com/tmpvar/jsdom) and rendering your app there instead of using the traditional `ReactDOMServer.renderToString` method. See the [isomorphic-react-csjs-demo](https://github.com/wKovacs64/isomorphic-react-csjs-demo) project for an example of this technique.
+`react-csjs` fully supports isomorphic/universal apps out of the box. You simply call the provided `getStyle()` method to grab all of your app's styles after rendering your app to string, like so:
+
+```js
+/* server.js */
+
+import React from 'react';
+import ReactDOM from 'react-dom/server';
+import express from 'express';
+import App from './App';
+import { getStyle } from 'react-csjs';
+
+const server = express();
+
+// Render the app
+const renderedApp = ReactDOM.renderToString(<App />);
+// Gather the generated styles
+const renderedStyles = getStyle();
+
+server.get('/', (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <style id="ssr-styles">${renderedStyles}</style>
+      </head>
+      <body>
+        <div id="root">${renderedApp}</div>
+        <script src="/bundle.main.js"></script>
+      </body>
+    </html>
+  `);
+});
+
+server.listen(3000);
+```
+
+You can then remove the SSR styles after rendering on the client.
+
+> NOTE: Although this step is not strictly necessary, without removing the SSR styles, you'll effectively have 2 declarations for every style definition: one for the server rendered and one for the auto-mounted styles on the client.
+
+```jsx
+/* client.js */
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import { removeStyle } from 'react-csjs';
+
+const root = document.getElementById('root');
+const ssrStyles = document.getElementById('ssr-styles');
+
+// Render the app client-side
+ReactDOM.render(<App />, root);
+
+// Remove the SSR styles to avoid having duplicate declarations
+removeStyle(ssrStyles);
+```
+
+## Example App
+
+You can see a fully working example of an isomorphic/universal React app using `react-csjs` in the [/example](/example) directory.

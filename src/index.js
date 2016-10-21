@@ -4,7 +4,7 @@ import insertStyle, { removeStyle, getStyle } from './insert-style';
 
 const cache = new Map();
 
-export { removeStyle };
+export { removeStyle, getStyle };
 
 export default function (userCss, ...values) {
   let css = userCss;
