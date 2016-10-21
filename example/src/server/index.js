@@ -1,28 +1,32 @@
-
-/* eslint-disable prefer-template */
-
 import path from 'path';
 import express from 'express';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
+import App from '../components/App';
+import { getStyle } from 'react-csjs';
 
+const server = express();
 const clientAssets = require(KYT.ASSETS_MANIFEST);
+server.use(express.static(path.join(process.cwd(), KYT.PUBLIC_DIR)));
 
-const app = express();
+// Render the app
+const renderedApp = ReactDOM.renderToString(<App />);
+// Gather the generated CSS
+const renderedStyles = getStyle();
 
-app.use(express.static(path.join(process.cwd(), KYT.PUBLIC_DIR)));
-
-app.get('/', (req, res) => {
+server.get('/', (req, res) => {
   res.send(`
-    <head>
-      ${clientAssets.main.css ?
-        '<link rel="stylesheet" type="text/css" href="' + clientAssets.main.css + '">'
-        : ''}
-      <title>React kyt</title>
-    </head>
-    <body>
-      <div id='root'></div>
-      <script src='${clientAssets.main.js}'></script>
-    </body>
+    <html>
+      <head>
+        <style id="ssr-styles">${renderedStyles}</style>
+        <title>react-csjs example app</title>
+      </head>
+      <body>
+        <div id="root">${renderedApp}</div>
+        <script src="${clientAssets.main.js}"></script>
+      </body>
+    </html>
   `);
 });
 
-app.listen(parseInt(KYT.SERVER_PORT, 10));
+server.listen(parseInt(KYT.SERVER_PORT, 10));

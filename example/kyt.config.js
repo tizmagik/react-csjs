@@ -4,7 +4,7 @@ module.exports = {
   reactHotLoader: true,
   modifyWebpackConfig: (kytConfig, options) => {
     kytConfig.resolve.alias = {
-      'react-csjs': path.resolve('../src/index.js')
+      'react-csjs': path.resolve('../src')
     }
 
     const babelLoader = kytConfig.module.loaders.find(loader => loader.loader === 'babel-loader');
