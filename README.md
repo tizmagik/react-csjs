@@ -170,7 +170,7 @@ You can then remove the SSR styles after rendering on the client.
 
 > NOTE: Although this step is not strictly necessary, without removing the SSR styles, you'll effectively have 2 declarations for every style definition: one for the server rendered and one for the auto-mounted styles on the client.
 
-```jsx
+```js
 /* client.js */
 
 import React from 'react';
