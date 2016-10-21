@@ -184,7 +184,8 @@ const ssrStyles = document.getElementById('ssr-styles');
 // Render the app client-side
 ReactDOM.render(<App />, root);
 
-// Can now safely remove the SSR styles since from here on, styles will be auto-mounted by react-csjs
+// Can now safely remove the SSR styles since from here on,
+// styles will be auto-mounted by react-csjs
 removeStyle(ssrStyles);
 ```
 
