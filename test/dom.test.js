@@ -1,20 +1,8 @@
 import { expect } from 'chai';
-import jsdom from 'jsdom';
-import { emptyDom, testCss, testElm, testElmIe8 } from './testUtil';
+import { testCss, testElm, testElmIe8 } from './testUtil';
 import insertStyle, { removeStyle, getStyle } from '../src/dom';
 
 describe('DOM variant', () => {
-  let document;
-
-  beforeEach(() => {
-    document = jsdom.jsdom(emptyDom);
-    global.document = document;
-  });
-
-  after(() => {
-    delete global.document;
-  });
-
   describe('insertStyle', () => {
     it('should insert a style element with the given CSS (append)', () => {
       const elm = insertStyle(testCss);

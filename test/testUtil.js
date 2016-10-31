@@ -1,11 +1,7 @@
-import jsdom from 'jsdom';
 import React from 'react';
 import csjs from 'csjs';
+import { jsdom } from 'jsdom';
 import withStyles from '../src';
-
-export const emptyDom = `
-  <!DOCTYPE html><html><head></head><body></body></html>
-`;
 
 export const testCss = `
   .button {
@@ -44,9 +40,9 @@ export const ButtonComponent = ({ classes, children }) => (
 
 export const WrappedButton = withStyles(testStyles)(ButtonComponent);
 
-export const testElm = jsdom.jsdom().createElement('style');
+export const testElm = jsdom().createElement('style');
 testElm.setAttribute('type', 'text/css');
 
-export const testElmIe8 = jsdom.jsdom().createElement('style');
+export const testElmIe8 = jsdom().createElement('style');
 testElmIe8.setAttribute('type', 'text/css');
 testElmIe8.styleSheet = { cssText: testCss };
