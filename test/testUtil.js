@@ -1,5 +1,6 @@
 import jsdom from 'jsdom';
 import React from 'react';
+import csjs from 'csjs';
 import withStyles from '../src';
 
 export const emptyDom = `
@@ -16,17 +17,10 @@ export const testCss = `
   }
 `;
 
-export const ButtonComponent = ({ classes, children }) => (
-  <div className={classes.button}>
-    <span className={classes.label}>
-      {children}
-    </span>
-  </div>
-);
+export const testStyles = csjs`${testCss}`;
 
-export const WrappedButton = withStyles(testCss)(ButtonComponent);
-
-@withStyles(testCss)
+// Decorator Syntax
+@withStyles(testStyles)
 export class DecoratedButton extends React.Component {
   render() {
     return (
@@ -38,6 +32,17 @@ export class DecoratedButton extends React.Component {
     );
   }
 }
+
+// Wrapped Syntax
+export const ButtonComponent = ({ classes, children }) => (
+  <div className={classes.button}>
+    <span className={classes.label}>
+      {children}
+    </span>
+  </div>
+);
+
+export const WrappedButton = withStyles(testStyles)(ButtonComponent);
 
 export const testElm = jsdom.jsdom().createElement('style');
 testElm.setAttribute('type', 'text/css');
