@@ -53,6 +53,7 @@
     "coveralls": "^2.11.14",
     "cross-env": "^3.1.2",
     "csjs": "^1.0.5",
+    "enzyme": "^2.5.1",
     "eslint": "^3.1.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",
@@ -63,6 +64,7 @@
     "nyc": "^8.3.1",
     "react": "^15.2.1",
     "react-addons-test-utils": "^15.3.2",
+    "react-dom": "^15.2.1",
     "sinon": "^1.17.6",
     "source-map-support": "^0.4.3"
   },

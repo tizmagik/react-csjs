@@ -1,18 +1,16 @@
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
 import { expect } from 'chai';
-import jsdom from 'jsdom';
+import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 import {
-  emptyDom,
   testElm,
-  ButtonComponent,
+  testStyles,
   DecoratedButton,
   WrappedButton,
 } from './testUtil';
 import withStyles from '../src';
 
-describe('index.js:', () => {
+describe('index.js', () => {
   const cache = {
     get: sinon.stub(),
     set: sinon.stub(),
@@ -21,12 +19,6 @@ describe('index.js:', () => {
   const csjs = {
     getCss: sinon.spy(),
   };
-
-  before(() => {
-    const document = jsdom.jsdom(emptyDom);
-    global.document = document;
-    global.window = document.defaultView;
-  });
 
   afterEach(() => {
     cache.get.reset();
@@ -37,25 +29,25 @@ describe('index.js:', () => {
     withStyles.__ResetDependency__('csjs');
   });
 
-  after(() => {
-    delete global.document;
-    delete global.window;
-  });
-
   describe('withStyles', () => {
-    it('should return a valid React component that renders (decorator)', () => {
-      expect(ReactTestUtils.isElement(<DecoratedButton />)).to.be.true;
-
-      const rendered = ReactTestUtils.renderIntoDocument(<DecoratedButton />);
-      expect(ReactTestUtils.isCompositeComponent(rendered)).to.be.true;
+    it('should return a styled React component (decorator)', () => {
+      const wrapper = shallow(<DecoratedButton />);
+      expect(wrapper.props().classes).to.be.an.instanceOf(Object);
+      Object
+        .keys(testStyles)
+        .forEach((style) => {
+          expect(wrapper.html()).to.contain(testStyles[`${style}`].className);
+        });
     });
 
-    it('should return a valid React component that renders (wrapped)', () => {
-      expect(ReactTestUtils.isElement(<ButtonComponent />)).to.be.true;
-      expect(ReactTestUtils.isElement(<WrappedButton />)).to.be.true;
-
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      expect(ReactTestUtils.isCompositeComponent(rendered)).to.be.true;
+    it('should return a styled React component (wrapped)', () => {
+      const wrapper = shallow(<WrappedButton />);
+      expect(wrapper.props().classes).to.be.an.instanceOf(Object);
+      Object
+        .keys(testStyles)
+        .forEach((style) => {
+          expect(wrapper.html()).to.contain(testStyles[`${style}`].className);
+        });
     });
 
     it('should cache styles on subsequent mounts', () => {
@@ -66,8 +58,8 @@ describe('index.js:', () => {
         .onSecondCall()
         .returns({ style: testElm, count: 1 });
 
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      rendered.componentWillMount();
+      mount(<WrappedButton />);
+      mount(<WrappedButton />);
       expect(cache.set.calledOnce).to.be.true;
     });
 
@@ -79,8 +71,8 @@ describe('index.js:', () => {
         .onSecondCall()
         .returns({ style: testElm, count: 1 });
 
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      rendered.componentWillUnmount();
+      const wrapper = mount(<WrappedButton />);
+      wrapper.unmount();
       expect(cache.delete.calledOnce).to.be.true;
     });
 
@@ -95,16 +87,15 @@ describe('index.js:', () => {
         .returns({ styles: testElm, count: 2 });
 
       /**
-       * renderIntoDocument triggers componentWillMount, the first instance of
-       * the component being mounted. Manually triggering componentWillMount
-       * right afterwards increases the count to 2, representing a second
-       * instance of the component. Manually triggering componentWillUnmount
-       * will then unmount one of them, but the first one still remains, so the
-       * cache should not be cleared.
+       * Calling mount triggers componentWillMount for the first instance of the
+       * component being mounted. Mounting again right afterwards triggers
+       * componentWillMount again, increasing the count to 2. Unmounting the
+       * second one will trigger componentWillUnmount, but the first one still
+       * remains, so the cache should not be cleared.
        */
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      rendered.componentWillMount();
-      rendered.componentWillUnmount();
+      mount(<WrappedButton />);
+      const wrapper = mount(<WrappedButton />);
+      wrapper.unmount();
       expect(cache.delete.called).to.be.false;
     });
 
@@ -113,8 +104,13 @@ describe('index.js:', () => {
       withStyles.__Rewire__('csjs', csjs);
 
       process.env.NODE_ENV = 'test';
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      rendered.componentWillUpdate();
+      const wrapper = shallow(<WrappedButton />);
+      /**
+       * Calling setProps on the Enzyme wrapper of the shallow render of
+       * <WrappedButton /> will trigger the componentWillUpdate lifecycle
+       * method.
+       */
+      wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.true;
     });
@@ -124,8 +120,13 @@ describe('index.js:', () => {
       withStyles.__Rewire__('csjs', csjs);
 
       process.env.NODE_ENV = 'production';
-      const rendered = ReactTestUtils.renderIntoDocument(<WrappedButton />);
-      rendered.componentWillUpdate();
+      const wrapper = shallow(<WrappedButton />);
+      /**
+       * Calling setProps on the Enzyme wrapper of the shallow render of
+       * <WrappedButton /> will trigger the componentWillUpdate lifecycle
+       * method.
+       */
+      wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.false;
     });
