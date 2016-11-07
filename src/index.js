@@ -52,7 +52,7 @@ export default function (userCss, ...values) {
       }
 
       render() {
-        return <DecoratedComponent classes={css} {...this.props} />;
+        return <DecoratedComponent classes={css} oprops={this.props} {...this.props} />;
       }
     };
 }
