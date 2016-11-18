@@ -5,9 +5,10 @@ import sinon from 'sinon';
 import {
   testElm,
   testStyles,
-  DecoratedButton,
-  WrappedButton,
 } from './testUtil';
+import TaggedDecoratedButton from './components/TaggedDecoratedButton';
+import DecoratedButton from './components/DecoratedButton';
+import WrappedButton from './components/WrappedButton';
 import withStyles from '../src';
 
 describe('index.js', () => {
@@ -30,6 +31,16 @@ describe('index.js', () => {
   });
 
   describe('withStyles', () => {
+    it('should return a styled React component (tagged decorator)', () => {
+      const wrapper = shallow(<TaggedDecoratedButton />);
+      expect(wrapper.props().classes).to.be.an.instanceOf(Object);
+      Object
+        .keys(testStyles)
+        .forEach((style) => {
+          expect(wrapper.html()).to.contain(testStyles[`${style}`].className);
+        });
+    });
+
     it('should return a styled React component (decorator)', () => {
       const wrapper = shallow(<DecoratedButton />);
       expect(wrapper.props().classes).to.be.an.instanceOf(Object);
