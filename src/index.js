@@ -16,7 +16,7 @@ export default function (userCss, ...values) {
   }
 
   let cssText = csjs.getCss(css);
-  let scope = scopedName(cssText)('DecoratedComponent');
+  const scope = scopedName(cssText)('DecoratedComponent');
 
   return DecoratedComponent =>
     class WithStyleDecorator extends Component {
