@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import csjs from 'csjs';
+import scopedName from 'csjs/lib/scoped-name';
 import insertStyle, { removeStyle, getStyle } from './insert-style';
 
-const cache = new Map();
+const cache = {};
 
 export { removeStyle, getStyle };
 
@@ -14,16 +15,19 @@ export default function (userCss, ...values) {
     css = csjs(css, ...values);
   }
 
+  let cssText = csjs.getCss(css);
+  const scope = scopedName(cssText)('DecoratedComponent');
+
   return DecoratedComponent =>
     class WithStyleDecorator extends Component {
       static displayName = `csjs(${DecoratedComponent.displayName
                             || DecoratedComponent.name || 'Component'})`
 
       componentWillMount() {
-        const refs = cache.get(DecoratedComponent);
+        const refs = cache[scope];
         if (!refs) {
-          this.elm = insertStyle(csjs.getCss(css));
-          cache.set(DecoratedComponent, { style: this.elm, count: 1 });
+          this.elm = insertStyle(cssText);
+          cache[scope] = { style: this.elm, count: 1 };
         } else {
           this.elm = refs.style;
           refs.count += 1;
@@ -33,7 +37,7 @@ export default function (userCss, ...values) {
       componentWillUpdate() {
         if (process.env.NODE_ENV !== 'production') {
             // Support React Hot Loader
-          const cssText = csjs.getCss(css);
+          cssText = csjs.getCss(css);
           if (getStyle(this.elm) !== cssText) {
             this.elm = insertStyle(cssText, { element: this.elm });
           }
@@ -41,13 +45,14 @@ export default function (userCss, ...values) {
       }
 
       componentWillUnmount() {
-        const refs = cache.get(DecoratedComponent);
-
-        refs.count -= 1;
-        if (refs.count === 0) {
-          cache.delete(DecoratedComponent);
-          removeStyle(this.elm);
-          this.elm = null;
+        const refs = cache[scope];
+        if (refs) {
+          refs.count -= 1;
+          if (refs.count === 0) {
+            delete cache[scope];
+            removeStyle(this.elm);
+            this.elm = null;
+          }
         }
       }
 
