@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 const cacheKey = require.resolve('../src/insert-style');
 
-describe('insert-style', () => {
+describe('insertStyle', () => {
   const document = global.document;
 
   after(() => {

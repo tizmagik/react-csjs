@@ -10,11 +10,8 @@ import DecoratedButton from './components/DecoratedButton';
 import WrappedButton from './components/WrappedButton';
 import withStyles from '../src';
 
-describe('index.js', () => {
-  const scope = scopedName(getCss(testStyles))('DecoratedComponent');
-  const csjs = { getCss: sinon.spy() };
-
-  describe('withStyles', () => {
+describe('withStyles', () => {
+  describe('core', () => {
     it('should return a styled React component (tagged decorator)', () => {
       const wrapper = shallow(<TaggedDecoratedButton />);
       expect(wrapper.props().classes).to.be.an.instanceOf(Object);
@@ -44,36 +41,37 @@ describe('index.js', () => {
           expect(wrapper.html()).to.contain(testStyles[`${style}`].className);
         });
     });
+  });
+
+  describe('caching', () => {
+    const scope = scopedName(getCss(testStyles))('DecoratedComponent');
+    let cache;
+
+    beforeEach(() => {
+      cache = {};
+      withStyles.__Rewire__('cache', cache);
+    });
+
+    afterEach(() => {
+      withStyles.__ResetDependency__('cache');
+    });
 
     it('should cache styles on subsequent mounts', () => {
-      const cache = {};
-      withStyles.__Rewire__('cache', cache);
-
       expect(cache[scope]).to.be.undefined;
       mount(<WrappedButton />);
       mount(<WrappedButton />);
       expect(cache[scope]).to.be.an('object').and.to.have.property('count', 2);
-
-      withStyles.__ResetDependency__('cache');
     });
 
     it('should clear styles cache on last component instance dismount', () => {
-      const cache = {};
-      withStyles.__Rewire__('cache', cache);
-
       expect(cache[scope]).to.be.undefined;
       const wrapper = mount(<WrappedButton />);
       expect(cache[scope]).to.be.an('object').and.to.have.property('count', 1);
       wrapper.unmount();
       expect(cache[scope]).to.be.undefined;
-
-      withStyles.__ResetDependency__('cache');
     });
 
     it('should not clear styles cache on normal component dismount', () => {
-      const cache = {};
-      withStyles.__Rewire__('cache', cache);
-
       expect(cache[scope]).to.be.undefined;
       /**
        * Calling mount triggers componentWillMount for the first instance of the
@@ -86,14 +84,23 @@ describe('index.js', () => {
       const wrapper = mount(<WrappedButton />);
       wrapper.unmount();
       expect(cache[scope]).to.be.an('object').and.to.have.property('count', 1);
+    });
+  });
 
-      withStyles.__ResetDependency__('cache');
+  describe('hot reload', () => {
+    const csjs = { getCss: sinon.spy() };
+    const realNodeEnv = process.env.NODE_ENV;
+
+    beforeEach(() => {
+      withStyles.__Rewire__('csjs', csjs);
+    });
+
+    afterEach(() => {
+      csjs.getCss.reset();
+      withStyles.__ResetDependency__('csjs');
     });
 
     it('should refresh styles in componentWillUpdate (non-production)', () => {
-      const realNodeEnv = process.env.NODE_ENV;
-      withStyles.__Rewire__('csjs', csjs);
-
       process.env.NODE_ENV = 'test';
       const wrapper = shallow(<WrappedButton />);
       /**
@@ -104,28 +111,14 @@ describe('index.js', () => {
       wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.true;
-
-      csjs.getCss.reset();
-      withStyles.__ResetDependency__('csjs');
     });
 
     it('should not refresh styles in componentWillUpdate (production)', () => {
-      const realNodeEnv = process.env.NODE_ENV;
-      withStyles.__Rewire__('csjs', csjs);
-
       process.env.NODE_ENV = 'production';
       const wrapper = shallow(<WrappedButton />);
-      /**
-       * Calling setProps on the Enzyme wrapper of the shallow render of
-       * <WrappedButton /> will trigger the componentWillUpdate lifecycle
-       * method.
-       */
       wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.false;
-
-      csjs.getCss.reset();
-      withStyles.__ResetDependency__('csjs');
     });
   });
 });
