@@ -1,34 +1,18 @@
 import React from 'react';
+import getCss from 'csjs/get-css';
+import scopedName from 'csjs/lib/scoped-name';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
-import {
-  testElm,
-  testStyles,
-} from './testUtil';
+import { testStyles } from './testUtil';
 import TaggedDecoratedButton from './components/TaggedDecoratedButton';
 import DecoratedButton from './components/DecoratedButton';
 import WrappedButton from './components/WrappedButton';
 import withStyles from '../src';
 
 describe('index.js', () => {
-  const cache = {
-    get: sinon.stub(),
-    set: sinon.stub(),
-    delete: sinon.stub(),
-  };
-  const csjs = {
-    getCss: sinon.spy(),
-  };
-
-  afterEach(() => {
-    cache.get.reset();
-    cache.set.reset();
-    cache.delete.reset();
-    csjs.getCss.reset();
-    withStyles.__ResetDependency__('cache');
-    withStyles.__ResetDependency__('csjs');
-  });
+  const scope = scopedName(getCss(testStyles))('DecoratedComponent');
+  const csjs = { getCss: sinon.spy() };
 
   describe('withStyles', () => {
     it('should return a styled React component (tagged decorator)', () => {
@@ -62,41 +46,35 @@ describe('index.js', () => {
     });
 
     it('should cache styles on subsequent mounts', () => {
+      const cache = {};
       withStyles.__Rewire__('cache', cache);
-      cache.get
-        .onFirstCall()
-        .returns(undefined)
-        .onSecondCall()
-        .returns({ style: testElm, count: 1 });
 
+      expect(cache[scope]).to.be.undefined;
       mount(<WrappedButton />);
       mount(<WrappedButton />);
-      expect(cache.set.calledOnce).to.be.true;
+      expect(cache[scope]).to.be.an('object').and.to.have.property('count', 2);
+
+      withStyles.__ResetDependency__('cache');
     });
 
     it('should clear styles cache on last component instance dismount', () => {
+      const cache = {};
       withStyles.__Rewire__('cache', cache);
-      cache.get
-        .onFirstCall()
-        .returns(undefined)
-        .onSecondCall()
-        .returns({ style: testElm, count: 1 });
 
+      expect(cache[scope]).to.be.undefined;
       const wrapper = mount(<WrappedButton />);
+      expect(cache[scope]).to.be.an('object').and.to.have.property('count', 1);
       wrapper.unmount();
-      expect(cache.delete.calledOnce).to.be.true;
+      expect(cache[scope]).to.be.undefined;
+
+      withStyles.__ResetDependency__('cache');
     });
 
     it('should not clear styles cache on normal component dismount', () => {
+      const cache = {};
       withStyles.__Rewire__('cache', cache);
-      cache.get
-        .onFirstCall()
-        .returns(undefined)
-        .onSecondCall()
-        .returns({ style: testElm, count: 1 })
-        .onThirdCall()
-        .returns({ styles: testElm, count: 2 });
 
+      expect(cache[scope]).to.be.undefined;
       /**
        * Calling mount triggers componentWillMount for the first instance of the
        * component being mounted. Mounting again right afterwards triggers
@@ -107,7 +85,9 @@ describe('index.js', () => {
       mount(<WrappedButton />);
       const wrapper = mount(<WrappedButton />);
       wrapper.unmount();
-      expect(cache.delete.called).to.be.false;
+      expect(cache[scope]).to.be.an('object').and.to.have.property('count', 1);
+
+      withStyles.__ResetDependency__('cache');
     });
 
     it('should refresh styles in componentWillUpdate (non-production)', () => {
@@ -124,6 +104,9 @@ describe('index.js', () => {
       wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.true;
+
+      csjs.getCss.reset();
+      withStyles.__ResetDependency__('csjs');
     });
 
     it('should not refresh styles in componentWillUpdate (production)', () => {
@@ -140,6 +123,9 @@ describe('index.js', () => {
       wrapper.setProps({ foo: 'bar' });
       process.env.NODE_ENV = realNodeEnv;
       expect(csjs.getCss.called).to.be.false;
+
+      csjs.getCss.reset();
+      withStyles.__ResetDependency__('csjs');
     });
   });
 });
